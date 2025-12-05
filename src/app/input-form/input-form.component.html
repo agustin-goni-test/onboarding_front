@@ -1,0 +1,84 @@
+<h2>Prueba de inferencia de documentos</h2>
+
+<label>User ID:</label>
+<input type="text" [(ngModel)]="userId">
+
+<br><br>
+
+<label>Tipo de inferencia</label>
+<select [(ngModel)]="inferenceType">
+    <option value="contact">Contacto</option>
+    <option value="account">Cuenta</option>
+</select>
+
+<br><br>
+
+<label>Seleccionar archivo:</label>
+<input type="file" (change)="onFileSelected($event)">
+
+<br><br>
+
+<button (click)="send()" [disabled]="!selectedFile || loading">
+    {{ loading ? 'Processing...' : 'Send' }}
+</button>
+
+<hr>
+
+<div *ngIf="errorMessage" class="error-message">
+    <h3>Error</h3>
+    <pre>{{ errorMessage }}</pre>
+</div>
+
+<h3>Tabla de valores</h3>
+
+<table *ngIf="result?.data" border="1" callpadding="6">
+    <thead>
+        <tr>
+            <th>Campo</th>
+            <th>Valor</th>
+            <th>Low confidence</th>
+            <th>Found multiple</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr *ngFor="let item of result.data">
+            <td>{{ getLabel(item.field) }}</td>
+            <td>{{ item.probable_value }}</td>
+
+            <!-- low_confidence column: Yes/No, red bold when true -->
+            <td 
+                [ngStyle]="item.low_confidence ? {'color':'red','font-weight':'bold'} : {}">
+                {{ item.low_confidence ? 'Yes' : 'No' }}
+            </td>
+
+            <!-- found_multiple column: Yes/No, red bold when true -->
+            <td
+                [ngStyle]="item.found_multiple ? {'color':'red','font-weight':'bold'} : {}">
+                {{ item.found_multiple ? 'Yes' : 'No' }}
+            </td>
+            
+        </tr>
+    </tbody>
+</table>
+
+<br><br>
+
+<button *ngIf="result?.data" (click)="captureResults()">
+    Guardar resultados
+</button>
+
+<hr>
+
+<h3>Raw API Response</h3>
+<pre *ngIf="result">{{ result | json }}</pre>
+
+<h3 *ngIf="result">Captured Values</h3>
+<div *ngIf="result">
+    <p><strong>Nombre:</strong> {{ captured.contactName }} </p>
+    <p><strong>RUT:</strong> {{ captured.contactRut }} </p>
+    <p><strong>Número de serie:</strong> {{ captured.serialNumber }} </p>
+    <p><strong>Banco:</strong> {{ captured.bankName }} </p>
+    <p><strong>Tipo de cuenta:</strong> {{ captured.accountType }} </p>
+    <p><strong>Número de cuenta:</strong> {{ captured.accountNumber }} </p>
+</div>
