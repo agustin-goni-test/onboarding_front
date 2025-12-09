@@ -127,21 +127,71 @@ export class InputFormComponent {
       console.log("Captura de campos estructurados:", this.captured)
     }
 
+    getCandidates(item: any): string[] {
+      const arr =
+        item.values ??
+        item.candidates ??
+        item.alternatives ??
+        item.variants ??
+        item.multiple_values ??
+        [];
+      
+      // Ensure it always returns an array of strings
+      if (!Array.isArray(arr)) return [];
+      return arr.map(v => (v == null ? '' : String(v)));
+    } 
+
     editItem(item: any) {
       item._editing = true;
+      item._useOther = false
+
+      const candidates = this.getCandidates(item);
+      // Default edit value is current probable value
       item._editValue = item.probable_value;
+
+      // If there are candidatos, select the matching one, else Other
+      if (candidates.length > 0) {
+        const match = candidates.find((c: any) => c === item.probable_value);
+        if (match !== undefined) {
+          item._selectedCandidate = match;
+          item._useOther = false;
+        }
+        else {
+          item._selectedCandidate = '__other__';
+          item._useOther = true;
+        }
+      }
+      else {
+        item._selectedCandidate = undefined;
+      }
+
     }
+
+    onCandidateChange(item: any) {
+      if (item._selectedCandidate === '__other__') {
+        item._useOther = true;
+        item._editValue = '';
+      }
+      else {
+        item._useOther = false;
+        item._editValue = item._selectedCandidate;
+      }
+    } 
 
     saveItem(item: any) {
       item.probable_value = item._editValue;
       item._editing = false;
       delete item._editValue;
+      delete item._selectedCandidate;
+      delete item._useOther;
       // Re-run capture results?
     }
 
     cancelEdit(item: any) {
       item._editing = false;
       delete item._editValue;
+      delete item._selectedCandidate;
+      delete item._useOther;
     }
 
 }

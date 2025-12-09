@@ -49,18 +49,26 @@
 
             <!-- value: show selector/input when editing, otherwise text -->
             <td>
-                <!-- <ng-container *ngIf="item._editing; else viewValue">
-                    <ng-container *ngIf="getCandidates(item)?length>0; else SingleInput">
-                    <select [(ngModel)]="item._selectedCandidate" (change)=onCandidateChange(item)>
-                        <option *ngFor="let c of getCandidates(item)" [ngvalue]="c">{{ c }}</option>
-
-                </ng-container> -->
-
-
-
                 <ng-container *ngIf="item._editing; else viewValue">
-                    <input type="text" [(ngModel)]="item._editValue">
+                    <!-- If there are multiple valures show a select with an "Other" option-->
+                    <ng-container *ngIf="(getCandidates(item) || []).length > 0; else SingleInput">
+                        <select [(ngModel)]="item._selectedCandidate" (change)=onCandidateChange(item)>
+                            <option *ngFor="let c of getCandidates(item)" [ngValue]="c">{{ c }}</option>
+                            <option [ngValue]="'__other__'">Other...</option>
+                        </select>
+
+                        <!-- Manual input when "Other..." is chosen -->
+                        <div *ngIf="item._useOther" style="margin-top:6px;">
+                            <input type="text" [(ngModel)]="item._editValue" placeholder="Ingresar valor">  
+                        </div>
+                    </ng-container>
+
+                    <!-- Fallback; single text input -->
+                    <ng-template #SingleInput>
+                        <input type="text" [(ngModel)]="item._editValue">
+                    </ng-template>
                 </ng-container>
+
                 <ng-template #viewValue>
                     {{ item.probable_value }}
                 </ng-template>
