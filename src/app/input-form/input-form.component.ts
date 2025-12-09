@@ -127,4 +127,21 @@ export class InputFormComponent {
       console.log("Captura de campos estructurados:", this.captured)
     }
 
+    editItem(item: any) {
+      item._editing = true;
+      item._editValue = item.probable_value;
+    }
+
+    saveItem(item: any) {
+      item.probable_value = item._editValue;
+      item._editing = false;
+      delete item._editValue;
+      // Re-run capture results?
+    }
+
+    cancelEdit(item: any) {
+      item._editing = false;
+      delete item._editValue;
+    }
+
 }

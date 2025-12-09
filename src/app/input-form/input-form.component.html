@@ -38,13 +38,33 @@
             <th>Valor</th>
             <th>Low confidence</th>
             <th>Found multiple</th>
+            <th>Actions</th>
         </tr>
     </thead>
 
     <tbody>
         <tr *ngFor="let item of result.data">
             <td>{{ getLabel(item.field) }}</td>
-            <td>{{ item.probable_value }}</td>
+            <!-- <td>{{ item.probable_value }}</td> -->
+
+            <!-- value: show selector/input when editing, otherwise text -->
+            <td>
+                <!-- <ng-container *ngIf="item._editing; else viewValue">
+                    <ng-container *ngIf="getCandidates(item)?length>0; else SingleInput">
+                    <select [(ngModel)]="item._selectedCandidate" (change)=onCandidateChange(item)>
+                        <option *ngFor="let c of getCandidates(item)" [ngvalue]="c">{{ c }}</option>
+
+                </ng-container> -->
+
+
+
+                <ng-container *ngIf="item._editing; else viewValue">
+                    <input type="text" [(ngModel)]="item._editValue">
+                </ng-container>
+                <ng-template #viewValue>
+                    {{ item.probable_value }}
+                </ng-template>
+            </td>
 
             <!-- low_confidence column: Yes/No, red bold when true -->
             <td 
@@ -57,6 +77,17 @@
                 [ngStyle]="item.found_multiple ? {'color':'red','font-weight':'bold'} : {}">
                 {{ item.found_multiple ? 'Yes' : 'No' }}
             </td>
+
+            <!-- Actions column: Edit / Save / Cancel -->
+             <td>
+                <ng-container *ngIf="item._editing; else editButton">
+                    <button (click)="saveItem(item)">Save</button>
+                    <button (click)="cancelEdit(item)">Cancel</button>
+                </ng-container>
+                <ng-template #editButton>
+                    <button (click)="editItem(item)">Edit</button>
+                </ng-template>
+             </td>
             
         </tr>
     </tbody>
