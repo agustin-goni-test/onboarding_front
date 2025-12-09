@@ -9,6 +9,7 @@
 <select [(ngModel)]="inferenceType">
     <option value="contact">Contacto</option>
     <option value="account">Cuenta</option>
+    <option value="commerce">Comercio</option>
 </select>
 
 <br><br>
@@ -103,15 +104,18 @@
 
 <br><br>
 
+<!-- Button to capture results -->
 <button *ngIf="result?.data" (click)="captureResults()">
     Guardar resultados
 </button>
 
 <hr>
 
+<!-- Display raw response-->
 <h3>Raw API Response</h3>
 <pre *ngIf="result">{{ result | json }}</pre>
 
+<!-- Display "captured" values-->
 <h3 *ngIf="result">Captured Values</h3>
 <div *ngIf="result">
     <p><strong>Nombre:</strong> {{ captured.contactName }} </p>
@@ -120,4 +124,8 @@
     <p><strong>Banco:</strong> {{ captured.bankName }} </p>
     <p><strong>Tipo de cuenta:</strong> {{ captured.accountType }} </p>
     <p><strong>Número de cuenta:</strong> {{ captured.accountNumber }} </p>
+    <p><strong>Razón social:</strong> {{ captured.socialReason }} </p>
+    <p><strong>Nombre de fantasía:</strong> {{ captured.fantasyName }} </p>
+    <p><strong>Actividad económica:</strong> {{ captured.economicActivity }} </p>
+    <p><strong>Composición:</strong> {{ captured.composition }} </p>
 </div>

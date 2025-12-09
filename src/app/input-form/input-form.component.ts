@@ -42,7 +42,11 @@ export class InputFormComponent {
     num_cuenta: "Número de cuenta",
     nombre_contacto: "Nombre del contacto",
     rut_contacto: "RUT del contacto",
-    num_serie: "Número de serie de documento"
+    num_serie: "Número de serie de documento",
+    razon_social: "Razón social",
+    nombre_fantasia: "Nombre de fantasía",
+    actividad_economica: "Actividad económica",
+    composition: "Composición de la sociedad"
   }
 
   // Method that translates the names from source to friendly
@@ -93,6 +97,7 @@ export class InputFormComponent {
         const field = item.field;
         const value = item.probable_value;
 
+        // Display the captured values in the model
         switch (field) {
           case "nombre_contacto":
             this.captured.contactName = value;
@@ -118,8 +123,24 @@ export class InputFormComponent {
             this.captured.accountNumber = value;
             break;
 
+          case "razon_social":
+            this.captured.socialReason = value;
+            break;
+
+          case "nombre_fantasia":
+            this.captured.fantasyName = value;
+            break;
+
+          case "actividad_economica":
+            this.captured.economicActivity = value;
+            break;
+            
+          case "composicion":
+            this.captured.composition = value;
+            break;
+
           default:
-            console.warn("Campo no reconocido:", field);
+            console.warn("Campo desconocido:", field);
 
         }
       }

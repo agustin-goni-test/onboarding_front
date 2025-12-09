@@ -5,6 +5,10 @@ export class InferenceResultModel {
     bankName: string | null = null;
     accountType: string | null = null;
     accountNumber: string | null = null;
+    socialReason: string | null = null;
+    fantasyName: string | null = null;
+    economicActivity: string | null = null;
+    composition: string | null = null;
 
     reset() {
         this.contactName = null;
@@ -13,5 +17,9 @@ export class InferenceResultModel {
         this.bankName = null;
         this.accountType = null;
         this.accountNumber = null;
+        this.socialReason = null;
+        this.fantasyName = null;
+        this.economicActivity = null;
+        this.composition = null;
     }
 }
