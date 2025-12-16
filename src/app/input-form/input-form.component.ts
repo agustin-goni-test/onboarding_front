@@ -21,7 +21,7 @@ import { finalize, lastValueFrom } from 'rxjs';
 export class InputFormComponent {
   
   // Maintain variables for the call
-  selectedFile: File | null = null;
+  selectedFiles: File[] = [];
   userId: string = '';
   inferenceType: string = 'account'; // Default value
 
@@ -55,24 +55,35 @@ export class InputFormComponent {
   }
 
   // To run when selecting a file
-  onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0] ?? null;
+  onFilesSelected(event: any) {
+    //const files: FileList = event.target.files
+    //this.selectedFiles = Array.from(files);
+    const newFiles = Array.from(event.target.files) as File[];
+    
+    for (const file of newFiles) {
+      // Avoid duplicates
+      if (!this.selectedFiles.some(f => f.name === file.name && f.size === file.size && f.lastModified === file.lastModified)) {
+        this.selectedFiles.push(file);
+      }
+    }
   }
 
   // Send the call through a multi part POST operation
   send() {
-    if (!this.selectedFile) return;
+    if (!this.selectedFiles.length) return;
 
     // Control variables
     this.loading = true;
     this.result = null;
     this.errorMessage = null;
 
+    const fileToSend = this.selectedFiles[0]; // For now, send only the first file
+
     // Call the service
     // Use success and error branches (Observable)
     // Use pipe for finalization and controlling the end state, success or not
     this.inferenceService
-      .inferDocument(this.userId, this.inferenceType, this.selectedFile)
+      .inferDocument(this.userId, this.inferenceType, fileToSend)
       .pipe(
         finalize(() => this.loading = false)
       )

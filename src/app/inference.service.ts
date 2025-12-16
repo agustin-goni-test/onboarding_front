@@ -16,7 +16,7 @@ export class InferenceService {
 
     formData.append('user_id', userId);
     formData.append('inference_type', inferenceType);
-    formData.append('file', file);
+    formData.append('files', file);
 
     return this.http.post(this.API_URL, formData);
   }

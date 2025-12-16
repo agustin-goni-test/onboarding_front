@@ -15,11 +15,18 @@
 <br><br>
 
 <label>Seleccionar archivo:</label>
-<input type="file" (change)="onFileSelected($event)">
+<input type="file" multiple (change)="onFilesSelected($event)">
+
+<!-- Add this to render the list of files selected -->
+ <ul *ngIf="selectedFiles.length">
+    <li *ngFor="let f of selectedFiles">
+        {{ f.name }} ({{ f.size }} bytes)
+    </li>
+ </ul>
 
 <br><br>
 
-<button (click)="send()" [disabled]="!selectedFile || loading">
+<button (click)="send()" [disabled]="selectedFiles.length === 0 || loading">
     {{ loading ? 'Processing...' : 'Send' }}
 </button>
 
