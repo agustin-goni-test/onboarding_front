@@ -15,7 +15,7 @@
 <br><br>
 
 <label>Seleccionar archivo:</label>
-<input type="file" multiple (change)="onFilesSelected($event)">
+<input type="file" multiple (change)="onFilesSelected($event)" #fileInput>
 
 <!-- Add this to render the list of files selected -->
  <ul *ngIf="selectedFiles.length">

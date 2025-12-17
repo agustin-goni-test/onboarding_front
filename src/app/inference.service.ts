@@ -11,12 +11,15 @@ export class InferenceService {
 
   constructor(private http: HttpClient) { }
 
-  inferDocument(userId: string, inferenceType: string, file:File): Observable<any> {
+  inferDocument(userId: string, inferenceType: string, files: File[]): Observable<any> {
     const formData = new FormData();
 
     formData.append('user_id', userId);
     formData.append('inference_type', inferenceType);
-    formData.append('files', file);
+    
+    for (const file of files) {
+      formData.append('files', file);
+    }
 
     return this.http.post(this.API_URL, formData);
   }

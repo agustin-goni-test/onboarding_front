@@ -1,0 +1,9 @@
+select {
+  max-width: 100%;
+  width: 100%;
+}
+
+select option {
+  white-space: normal;      /* allow wrapping */
+  word-break: break-word;  /* break very long strings */
+}

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { InferenceService } from '../inference.service';
 import { InferenceResultModel } from '../models/inference-result.model';
 import { FormsModule } from '@angular/forms';
@@ -29,6 +29,9 @@ export class InputFormComponent {
   result: any = null;
   loading = false;
   errorMessage: string | null = null;
+
+  // Directive that grabs the #fileInput element from the template (DOM) to manipulate
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   // Persistent results used as the final "outcome" of the inference
   captured: InferenceResultModel = new InferenceResultModel();
@@ -83,9 +86,15 @@ export class InputFormComponent {
     // Use success and error branches (Observable)
     // Use pipe for finalization and controlling the end state, success or not
     this.inferenceService
-      .inferDocument(this.userId, this.inferenceType, fileToSend)
+      .inferDocument(this.userId, this.inferenceType, this.selectedFiles)
       .pipe(
-        finalize(() => this.loading = false)
+        finalize(() => {
+          this.loading = false
+
+          // Clear the selected files to enable the next inference
+          this.selectedFiles = [];
+          this.fileInput.nativeElement.value = '';
+        })
       )
       .subscribe({
         next: (result) => {
