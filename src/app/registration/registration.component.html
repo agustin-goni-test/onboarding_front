@@ -1,0 +1,42 @@
+<h2>Registro de comercio</h2>
+
+<form (ngSubmit)="onSubmit()" #registrationForm="ngForm">
+    <label>RUT:</label>
+    <input 
+        type="text"
+        id="rut"
+        name="rut"
+        [(ngModel)]="rut" 
+        required
+    />
+    
+    <br><br>
+    
+    <label>Correo:</label>
+    <input
+        type="text"
+        id="email"
+        name="email"
+        [(ngModel)]="email" 
+        required
+    />
+    
+    <br><br>
+   
+    <label>Teléfono de contacto:</label>
+    <input
+        type="text"
+        id="phone"
+        name="phone"
+        [(ngModel)]="phone" 
+        required
+    />
+   
+    <br><br>
+
+    
+    <button type="submit" [disabled]="registrationForm.invalid">
+        Registrar
+    </button>
+
+</form>
